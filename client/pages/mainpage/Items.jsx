@@ -81,20 +81,21 @@ export default function Items() {
   return (
     <MainLayout>
       <div className="space-y-6">
-        <div className="flex justify-between items-start">
+        <div className="flex justify-between items-start animate-fadeInDown">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Item Master</h1>
-            <p className="text-muted-foreground mt-1">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Item Master</h1>
+            <p className="text-gray-600 mt-2 text-lg">
               Manage food and raw material items
             </p>
           </div>
-          <Button onClick={() => handleOpenModal()} className="gap-2">
+          <Button onClick={() => handleOpenModal()} className="gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all">
             <Plus className="w-4 h-4" />
             Add Item
           </Button>
         </div>
 
-        <DataTable
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl border-2 border-white p-6 shadow-lg hover:shadow-xl transition-all animate-slideInUp">
+          <DataTable
           columns={[
             { key: "name", label: "Item Name" },
             { key: "unit", label: "Unit" },
@@ -143,6 +144,7 @@ export default function Items() {
           searchableFields={["name"]}
           title="Items List"
         />
+        </div>
       </div>
 
       <FormModal

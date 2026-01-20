@@ -7,7 +7,7 @@ import { createServer } from "./server/index.js";
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
-    port: 8080,
+    port: 5000,
     fs: {
       allow: [".", "./client", "./shared"],
       deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "server/**"],
@@ -31,7 +31,7 @@ function expressPlugin() {
     apply: "serve",
     configureServer(server) {
       const app = createServer();
-      server.middlewares.use(app);
+      server.middlewares.use("/api", app);
     },
   };
 }
