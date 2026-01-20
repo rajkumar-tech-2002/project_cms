@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Trash2, Edit2, Plus } from "lucide-react";
+import { Trash2, Edit2, Plus, X } from "lucide-react";
 import MainLayout from "@/components/MainLayout.jsx";
 import DataTable from "@/components/DataTable.jsx";
-import FormModal from "@/components/FormModal.jsx";
 import FormInput from "@/components/FormInput.jsx";
 import FormSelect from "@/components/FormSelect.jsx";
 import { Button } from "@/components/ui/button.jsx";
@@ -20,7 +19,7 @@ const mockItems = [
 
 export default function Items() {
   const [items, setItems] = useState(mockItems);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -30,7 +29,13 @@ export default function Items() {
   });
   const [errors, setErrors] = useState({});
 
-  const handleOpenModal = (item) => {
+  const resetForm = () => {
+    setFormData({ name: "", unit: "Kg", minimumStock: 0, status: "Active" });
+    setErrors({});
+    setEditingId(null);
+  };
+
+  const openForm = (item) => {
     if (item) {
       setEditingId(item.id);
       setFormData({
@@ -40,11 +45,10 @@ export default function Items() {
         status: item.status,
       });
     } else {
-      setEditingId(null);
-      setFormData({ name: "", unit: "Kg", minimumStock: 0, status: "Active" });
+      resetForm();
     }
     setErrors({});
-    setIsModalOpen(true);
+    setIsFormOpen(true);
   };
 
   const validateForm = () => {
@@ -69,7 +73,8 @@ export default function Items() {
     } else {
       setItems([...items, { id: Math.max(...items.map((i) => i.id), 0) + 1, ...formData }]);
     }
-    setIsModalOpen(false);
+    setIsFormOpen(false);
+    resetForm();
   };
 
   const handleDelete = (id) => {
@@ -88,11 +93,99 @@ export default function Items() {
               Manage food and raw material items
             </p>
           </div>
-          <Button onClick={() => handleOpenModal()} className="gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all">
+          <Button onClick={() => openForm()} className="gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all">
             <Plus className="w-4 h-4" />
             Add Item
           </Button>
         </div>
+
+        {isFormOpen && (
+          <div className="bg-white/90 backdrop-blur-sm rounded-2xl border-2 border-white p-6 shadow-lg hover:shadow-xl transition-all animate-slideInUp">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold text-foreground">
+                {editingId ? "Edit Item" : "Add New Item"}
+              </h2>
+              <button
+                onClick={() => {
+                  setIsFormOpen(false);
+                  resetForm();
+                }}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-500"
+                aria-label="Close item form"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <FormInput
+                label="Item Name"
+                placeholder="e.g., Rice, Cooking Oil"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                error={errors.name}
+              />
+
+              <FormSelect
+                label="Unit"
+                value={formData.unit}
+                onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
+                error={errors.unit}
+                options={[
+                  { value: "Kg", label: "Kilogram (Kg)" },
+                  { value: "Litre", label: "Litre (L)" },
+                  { value: "Piece", label: "Piece" },
+                ]}
+              />
+
+              <FormInput
+                label="Minimum Stock Level"
+                type="number"
+                min="0"
+                value={formData.minimumStock}
+                onChange={(e) =>
+                  setFormData({ ...formData, minimumStock: parseInt(e.target.value, 10) || 0 })
+                }
+                error={errors.minimumStock}
+              />
+
+              <FormSelect
+                label="Status"
+                value={formData.status}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    status: e.target.value,
+                  })
+                }
+                options={[
+                  { value: "Active", label: "Active" },
+                  { value: "Inactive", label: "Inactive" },
+                ]}
+              />
+
+              <div className="flex justify-end gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setIsFormOpen(false);
+                    resetForm();
+                  }}
+                  className="bg-white"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all"
+                >
+                  {editingId ? "Update" : "Add"}
+                </Button>
+              </div>
+            </form>
+          </div>
+        )}
 
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl border-2 border-white p-6 shadow-lg hover:shadow-xl transition-all animate-slideInUp">
           <DataTable
@@ -125,7 +218,7 @@ export default function Items() {
               render: (_, row) => (
                 <div className="flex gap-2">
                   <button
-                    onClick={() => handleOpenModal(row)}
+                    onClick={() => openForm(row)}
                     className="p-2 hover:bg-blue-50 rounded text-blue-600"
                   >
                     <Edit2 className="w-4 h-4" />
@@ -147,59 +240,6 @@ export default function Items() {
         </div>
       </div>
 
-      <FormModal
-        isOpen={isModalOpen}
-        title={editingId ? "Edit Item" : "Add New Item"}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleSubmit}
-        submitLabel={editingId ? "Update" : "Add"}
-      >
-        <FormInput
-          label="Item Name"
-          placeholder="e.g., Rice, Cooking Oil"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          error={errors.name}
-        />
-
-        <FormSelect
-          label="Unit"
-          value={formData.unit}
-          onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
-          error={errors.unit}
-          options={[
-            { value: "Kg", label: "Kilogram (Kg)" },
-            { value: "Litre", label: "Litre (L)" },
-            { value: "Piece", label: "Piece" },
-          ]}
-        />
-
-        <FormInput
-          label="Minimum Stock Level"
-          type="number"
-          min="0"
-          value={formData.minimumStock}
-          onChange={(e) =>
-            setFormData({ ...formData, minimumStock: parseInt(e.target.value) || 0 })
-          }
-          error={errors.minimumStock}
-        />
-
-        <FormSelect
-          label="Status"
-          value={formData.status}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              status: e.target.value,
-            })
-          }
-          options={[
-            { value: "Active", label: "Active" },
-            { value: "Inactive", label: "Inactive" },
-          ]}
-        />
-      </FormModal>
     </MainLayout>
   );
 }
