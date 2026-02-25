@@ -1,13 +1,13 @@
 # dependencies
-node_modules/
-pnpm-lock.yaml
-package-lock.json
-yarn.lock
+**/node_modules/
+**/pnpm-lock.yaml
+**/package-lock.json
+**/yarn.lock
 
 # build outputs
-dist/
-build/
-coverage/
+**/dist/
+**/build/
+**/coverage/
 *.log
 npm-debug.log*
 pnpm-debug.log*
@@ -15,9 +15,9 @@ yarn-debug.log*
 yarn-error.log*
 
 # env & secrets
-.env
-.env.*
-!.env.example
+**/.env
+**/.env.*
+!**/.env.example
 
 # editor/system
 .DS_Store
@@ -30,3 +30,7 @@ Thumbs.db
 *.tmp
 .cache/
 vite.config.ts.timestamp-*
+
+# server specific
+server/uploads/
+server/assets/
