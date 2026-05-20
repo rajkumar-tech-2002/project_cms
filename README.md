@@ -1,343 +1,332 @@
-# 🍽️ CMS – Canteen Management System
+# 🚀 SmartNandha CMS: Production-Grade Canteen Management System
 
-A Full-Stack Web Application for Efficient Canteen Operations Management  
-**Developed and Designed for Institutional Deployment**
+[![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![MySQL](https://img.shields.io/badge/MySQL-00000f?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 
----
-
-## 📌 Project Overview
-
-**Canteen Management System (CMS)** is a comprehensive web application built to streamline and digitize canteen operations. The system supports **two user roles** — **Admin** and **Counter Operator** — each with dedicated dashboards and workflows.
-
-The application is built using a **React + Vite** frontend and a **Node.js + Express** backend, connected to a **MySQL** database for secure and structured data management.
+A robust, full-stack **Canteen Management System** built with the PERN (PostgreSQL/MySQL, Express, React, Node) architecture. This system streamlines canteen operations, inventory tracking, vendor management, and real-time sales reporting with a focus on scalability and data integrity.
 
 ---
 
-## 🎯 Objectives
+## 📖 Overview
 
-- Digitize canteen inventory and purchase management
-- Track daily sales and distribution transactions efficiently
-- Maintain accurate grocery and prepared-item stock records
-- Generate detailed operational and financial reports (PDF & Excel)
-- Provide a role-based, responsive, and user-friendly interface
-- Support multi-location canteen counter operations
+### The Problem
 
----
+Traditional canteen management relies on manual ledger entries, leading to:
 
-## 🚀 Key Features
+- **Inventory Mismatch**: Inaccurate tracking of raw materials (groceries).
+- **Opaque Distribution**: Difficulty tracking items sent to various counters.
+- **Data Fragmentation**: Sales reports are hard to aggregate and analyze in real-time.
 
-### 👤 Role-Based Access Control
+### The Solution
 
-Two distinct roles with protected routes:
+**SmartNandha CMS** provides a centralized platform that digitizes the entire lifecycle of a canteen:
 
-| Role                | Access                                                                                                                                     |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Admin**           | Full system management – Dashboard, Grocery, Items, Vendors, Purchase, Inventory, Distribution, Locations, Reports, Users, Counter Monitor |
-| **CounterOperator** | Counter-specific views – Counter Dashboard, Counter Items, Counter Reports                                                                 |
-
-### 📦 Inventory & Stock Management
-
-- Track **grocery items** (raw materials) and **prepared food items**
-- Monitor stock levels and distributions across multiple canteen **locations**
-
-### 🛒 Purchase Management
-
-- Record vendor-wise purchases with itemized billing
-- Maintain complete purchase history with PDF/Excel export
-
-### 🔄 Distribution Management
-
-- Distribute items from central store to individual counters
-- Monitor and track real-time distribution records
-
-### 💰 Sales & Counter Operations
-
-- Counter operators record daily sales per item
-- Admin monitors all counter activity in real time via Counter Monitor
-
-### 📊 Reports
-
-- Generate and export detailed reports (PDF via **jsPDF**, Excel via **jspdf-autotable**)
-- Available for both Admin and Counter Operator views
-
-### 🔐 Authentication & Security
-
-- JWT-based login with role-based route protection
-- Password hashing using **bcryptjs**
-- Forgot password functionality
+- **Procurement**: Tracking vendor purchases and stock entry.
+- **Production**: Managing prepared food items and their ingredients.
+- **Distribution**: Seamless tracking of items moved from the main store to sub-counters.
+- **Sales**: Real-time sales logging at the counter level with instant inventory deduction.
 
 ---
 
-## 🛠 Technology Stack
+## 🧠 System Architecture
 
-### Frontend (Client)
+### 📊 Architecture Diagram
 
-| Layer                     | Technology                                       |
-| :------------------------ | :----------------------------------------------- |
-| **Framework**             | React 18 + Vite (SWC)                            |
-| **Routing**               | React Router DOM v6                              |
-| **State / Data Fetching** | TanStack React Query v5                          |
-| **Styling**               | Tailwind CSS v3 + Vanilla CSS                    |
-| **UI Components**         | Radix UI (Dialog, Select, Toast, Tooltip, Label) |
-| **Forms**                 | React Hook Form                                  |
-| **Charts**                | Recharts                                         |
-| **Icons**                 | Lucide React                                     |
-| **Notifications**         | React Toastify + Sonner                          |
-| **PDF Export**            | jsPDF + jspdf-autotable                          |
-| **Auth Token**            | jsonwebtoken                                     |
-| **Dropdowns**             | React-Select                                     |
+```mermaid
+graph TD
+    subgraph Client_Layer [Frontend - React/Vite]
+        UI[User Interface]
+        State[React Query/Context]
+        Router[React Router]
+    end
 
-### Backend (Server)
+    subgraph Server_Layer [Backend - Node.js/Express]
+        API[RESTful API]
+        Auth[JWT/Bcrypt Auth]
+        Controller[Business Logic]
+        Middleware[Validation/Security]
+    end
 
-| Layer                     | Technology                   |
-| :------------------------ | :--------------------------- |
-| **Runtime**               | Node.js (ESM modules)        |
-| **Framework**             | Express.js v4                |
-| **Database**              | MySQL (via mysql2 v3)        |
-| **Authentication**        | JWT (jsonwebtoken)           |
-| **Password Hashing**      | bcryptjs                     |
-| **Process Manager (Dev)** | Nodemon                      |
-| **IIS Deploy**            | web.config (serverless-http) |
-| **Config**                | dotenv                       |
+    subgraph Data_Layer [Database - MySQL]
+        DB[(MySQL Pool)]
+        Schema[Relational Schema]
+    end
 
----
-
-## 🏗 System Architecture
-
+    UI <--> State
+    State <--> API
+    API <--> Controller
+    Controller <--> DB
+    Controller --> Auth
 ```
+
+### 🏗️ Explanation
+
+- **Data Flow**: Unidirectional state management on the frontend using TanStack Query for efficient server-state synchronization.
+- **Client-Server Interaction**: Stateless RESTful communication secured by JWT tokens.
+- **Scaling Approach**: The backend uses a MySQL connection pool to handle concurrent requests, while the frontend is optimized for fast TTI (Time to Interactive) via Vite's ESM-based build.
+
+---
+
+## 🔄 Application Flow
+
+### 📌 Flowchart
+
+```mermaid
+flowchart TD
+    Start([User Access]) --> Auth{Authenticated?}
+    Auth -- No --> Login[Login Page]
+    Login --> Auth
+    Auth -- Yes --> Role{User Role}
+
+    Role -- Admin --> AdminDash[Admin Dashboard]
+    Role -- Counter --> CounterDash[Counter Dashboard]
+
+    AdminDash --> Inv[Inventory & Procurement]
+    AdminDash --> Dist[Distribution Management]
+    AdminDash --> Users[User Management]
+
+    CounterDash --> Sales[Point of Sale]
+    CounterDash --> Stock[Counter Stock Check]
+
+    Inv --> Reports[PDF/Excel Reports]
+    Sales --> Reports
+    Reports --> End([Logout])
+```
+
+### 🔁 Sequence Diagram
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant Backend
+    participant MySQL
+
+    User->>Frontend: Perform Action (e.g., Log Sale)
+    Frontend->>Backend: POST /api/sales (with JWT)
+    Backend->>Backend: Validate Token & Data
+    Backend->>MySQL: START TRANSACTION
+    MySQL-->>Backend: OK
+    Backend->>MySQL: Update Stock & Insert Sale
+    MySQL-->>Backend: Rows Affected
+    Backend->>MySQL: COMMIT
+    Backend-->>Frontend: 201 Created (Success)
+    Frontend-->>User: Show Toast Notification
+```
+
+---
+
+## 🧩 Module Breakdown
+
+### 👑 Admin Module
+
+- **Inventory Control**: Real-time tracking of raw groceries and prepared items.
+- **Procurement**: Manage vendor details, purchase orders, and stock updates.
+- **Distribution**: Centralized tracking of items distributed to various counters.
+- **Reporting**: Advanced analytics for sales, purchases, and low-stock items.
+
+### 🏪 Counter Module
+
+- **Sales Interface**: Quick entry for food sales.
+- **Local Stock**: Monitor available items at specific counter locations.
+- **Dashboard**: Daily sales summary and performance metrics.
+
+### 🔐 API & Security Layer
+
+- **RESTful Endpoints**: Modular routing for users, inventory, sales, and vendors.
+- **Data Integrity**: MySQL transactions ensure that stock updates and sales entries are atomic.
+- **Security**: JWT-based authentication and password hashing using Bcrypt.
+
+---
+
+## ✨ Features
+
+- **Real-time Dashboards**: Interactive charts (Recharts) showing 6-month trends.
+- **Low Stock Alerts**: Automated priority flagging for materials below minimum thresholds.
+- **PDF Report Generation**: Professional PDF exports for sales and inventory using `jsPDF`.
+- **Responsive UI**: Sleek, mobile-friendly interface built with Tailwind CSS and Radix UI.
+- **Role-Based Access Control (RBAC)**: Distinct permissions for Admin, Faculty, and Counter Staff.
+
+---
+
+## 🧰 Tech Stack (Detailed)
+
+| Technology          | Usage              | Rationale                                                       |
+| :------------------ | :----------------- | :-------------------------------------------------------------- |
+| **React (Vite)**    | Frontend Framework | High-performance UI rendering and developer experience.         |
+| **Node.js/Express** | Backend Server     | Non-blocking I/O for handling high-concurrency canteen traffic. |
+| **MySQL**           | Database           | ACID compliance for critical financial and stock data.          |
+| **Tailwind CSS**    | Styling            | Utility-first approach for rapid and consistent design.         |
+| **JWT**             | Authentication     | Stateless and secure user sessions.                             |
+| **React Query**     | State Management   | Auto-caching and efficient background data fetching.            |
+
+---
+
+## 📂 Project Structure
+
+```text
 CMS/
-├── client/                  # Frontend – React + Vite SPA
+├── client/                # Frontend Application (React + Vite)
 │   ├── src/
-│   │   ├── App.jsx           # Root: Routes & Providers
-│   │   ├── main.jsx
-│   │   ├── global.css
-│   │   ├── components/       # Shared UI components
-│   │   │   ├── MainLayout.jsx
-│   │   │   ├── ProtectedRoute.jsx
-│   │   │   ├── DataTable.jsx
-│   │   │   ├── ChartComponent.jsx
-│   │   │   ├── StatsCard.jsx
-│   │   │   ├── FormInput.jsx
-│   │   │   ├── FormModal.jsx
-│   │   │   ├── FormSelect.jsx
-│   │   │   ├── Footer.jsx
-│   │   │   └── ui/           # Radix-based UI primitives
-│   │   ├── pages/
-│   │   │   ├── homepage/     # Public pages
-│   │   │   │   ├── landingpage.jsx
-│   │   │   │   ├── login.jsx
-│   │   │   │   └── forgotpassword.jsx
-│   │   │   ├── mainpage/     # Admin pages
-│   │   │   │   ├── Dashboard.jsx
-│   │   │   │   ├── Grocery.jsx
-│   │   │   │   ├── Items.jsx
-│   │   │   │   ├── Vendors.jsx
-│   │   │   │   ├── Purchase.jsx
-│   │   │   │   ├── Inventory.jsx
-│   │   │   │   ├── Distribution.jsx
-│   │   │   │   ├── Locations.jsx
-│   │   │   │   ├── Reports.jsx
-│   │   │   │   ├── User.jsx
-│   │   │   │   ├── CounterMonitor.jsx
-│   │   │   │   └── NotFound.jsx
-│   │   │   └── counterpage/  # Counter Operator pages
-│   │   │       ├── CounterDashboard.jsx
-│   │   │       ├── CounterItems.jsx
-│   │   │       └── CounterReports.jsx
-│   │   ├── hooks/
-│   │   ├── lib/
-│   │   └── utils/
-│   ├── public/
-│   ├── index.html
-│   ├── vite.config.js
-│   ├── tailwind.config.js
-│   └── package.json
-│
-└── server/                  # Backend – Node.js + Express
-    ├── server.js             # Entry point & route registration
-    ├── db.js                 # MySQL connection pool
-    ├── routes/               # Express route definitions (11 modules)
-    │   ├── userRoutes.js
-    │   ├── groceryRoutes.js
-    │   ├── preparedItemRoutes.js
-    │   ├── vendorRoutes.js
-    │   ├── purchaseRoutes.js
-    │   ├── distributeRoutes.js
-    │   ├── inventoryRoutes.js
-    │   ├── locationRoutes.js
-    │   ├── salesRoutes.js
-    │   ├── dashboardRoutes.js
-    │   └── demo.js
-    ├── controller/           # Business logic (11 controllers)
-    │   ├── userController.js
-    │   ├── groceryController.js
-    │   ├── preparedItemController.js
-    │   ├── vendorController.js
-    │   ├── purchaseController.js
-    │   ├── distributeController.js
-    │   ├── inventoryController.js
-    │   ├── locationController.js
-    │   ├── salesController.js
-    │   ├── dashboardController.js
-    │   └── reportController.js
-    ├── middlewares/          # Auth & validation middleware
-    ├── migrations/           # DB migration scripts
-    ├── assets/               # Static server assets (e.g. logos)
-    ├── uploads/              # Uploaded files
-    ├── utils/
-    ├── web.config            # IIS deployment configuration
-    └── package.json
+│   │   ├── components/    # Reusable UI components (Shadcn style)
+│   │   ├── pages/         # Page-level components (Admin, Counter, Home)
+│   │   ├── hooks/         # Custom React hooks (Data fetching)
+│   │   └── lib/           # Utility functions (API client)
+│   └── public/            # Static assets
+└── server/                # Backend API (Node.js + Express)
+    ├── controller/        # Business logic for each resource
+    ├── routes/            # API endpoint definitions
+    ├── migrations/        # SQL schema updates
+    ├── utils/             # Helper functions (JWT, hashing)
+    └── server.js          # Application entry point
 ```
 
 ---
 
-## 🔑 Application Routes
+## ⚙️ Installation & Setup
 
-### Public Routes
+### 🖥️ System Requirements
 
-| Path               | Component      | Description           |
-| ------------------ | -------------- | --------------------- |
-| `/`                | LandingPage    | Home / Welcome screen |
-| `/login`           | Login          | User authentication   |
-| `/forgot-password` | ForgotPassword | Password reset        |
+- **Node.js**: v18.x or higher
+- **Database**: MySQL 8.0+
+- **OS**: Windows / Linux / macOS
 
-### Admin Routes _(Role: Admin)_
+### 🔧 Step-by-Step Setup
 
-| Path               | Component      | Description                           |
-| ------------------ | -------------- | ------------------------------------- |
-| `/dashboard`       | Dashboard      | Overview & stats                      |
-| `/grocery`         | Grocery        | Grocery items management              |
-| `/items`           | Items          | Prepared food items management        |
-| `/vendors`         | Vendors        | Vendor management                     |
-| `/purchase`        | Purchase       | Purchase recording & history          |
-| `/inventory`       | Inventory      | Stock inventory view                  |
-| `/distribution`    | Distribution   | Item distribution to counters         |
-| `/locations`       | Locations      | Canteen location management           |
-| `/reports`         | Reports        | System-wide reports & exports         |
-| `/user`            | User           | User management                       |
-| `/counter-monitor` | CounterMonitor | Real-time counter activity monitoring |
+1.  **Clone the Repository**
 
-### Counter Operator Routes _(Role: CounterOperator)_
+    ```bash
+    git clone https://github.com/your-username/smartnandha-cms.git
+    cd smartnandha-cms
+    ```
 
-| Path                 | Component        | Description                     |
-| -------------------- | ---------------- | ------------------------------- |
-| `/counter/dashboard` | CounterDashboard | Counter-specific dashboard      |
-| `/counter/items`     | CounterItems     | Available items for the counter |
-| `/counter/reports`   | CounterReports   | Counter sales reports & exports |
+2.  **Environment Configuration**
+    - Create a `.env` file in the `server` directory:
+      ```env
+      PORT=3001
+      DB_HOST=localhost
+      DB_USER=root
+      DB_PASSWORD=your_password
+      DB_NAME=canteen_db
+      JWT_SECRET=your_super_secret_key
+      ```
+    - Create a `.env` file in the `client` directory:
+      ```env
+      VITE_API_URL=http://localhost:3001/api
+      ```
 
----
+3.  **Database Setup**
+    - Create a database named `canteen_db` in MySQL.
+    - Import the schema from `/server/db_schema.sql` (if available) or initialization scripts.
 
-## ⚙️ Installation & Setup Guide
+4.  **Install Dependencies**
 
-### 1️⃣ Prerequisites
+    ```bash
+    # Root
+    npm install
 
-- **Node.js** v18 or higher
-- **npm** v9 or higher
-- **MySQL** Server (local or remote)
-- **Git**
+    # Client
+    cd client && npm install
 
-### 2️⃣ Clone Repository
+    # Server
+    cd ../server && npm install
+    ```
 
-```bash
-git clone https://github.com/rajkumar-tech-2002/project_cms.git
-cd project_cms
-```
+5.  **Run the Application**
 
-### 3️⃣ Backend Setup
+    ```bash
+    # Run Server (from /server)
+    npm run dev
 
-```bash
-cd server
-npm install
-```
-
-Create a `.env` file inside the `server/` folder:
-
-```env
-PORT=3001
-JWT_SECRET=your_jwt_secret_key
-DB_HOST=your_db_host
-DB_PORT=3306
-DB_USER=your_db_username
-DB_PASSWORD=your_db_password
-DB_NAME=cms
-```
-
-Start the backend server:
-
-```bash
-# Development (with auto-restart)
-npm run dev
-
-# Production
-node server.js
-```
-
-The server will run at: **`http://localhost:3001`**
-
-### 4️⃣ Frontend Setup
-
-```bash
-cd client
-npm install
-```
-
-Create a `.env` file inside the `client/` folder:
-
-```env
-VITE_API_URL=http://localhost:3001
-```
-
-Start the development server:
-
-```bash
-npm run dev
-```
-
-Build for production:
-
-```bash
-npm run build
-```
-
-The client will run at: **`http://localhost:5173`** (dev) or served from `dist/` directory.
+    # Run Client (from /client)
+    npm run dev
+    ```
 
 ---
 
-## 🔐 Security Considerations
+## 🔐 Security & Restrictions
 
-- **JWT Authentication** – Stateless token-based auth with role validation
-- **bcryptjs** – Industry-standard password hashing
-- **Role-Based Route Protection** – `ProtectedRoute` component restricts Admin vs. CounterOperator access
-- **Environment Variables** – Sensitive credentials stored in `.env` (not committed to git)
-- **CORS** – Configured on backend to control allowed origins
-- **Parameterized Queries** – MySQL2 prevents SQL injection via prepared statements
+- **JWT Authentication**: Protects all sensitive API endpoints.
+- **Bcrypt Hashing**: Passwords are never stored in plain text.
+- **SQL Injection Protection**: All database queries use prepared statements via `mysql2/promise`.
+- **CORS Configuration**: Restricts API access to authorized domains only.
 
 ---
 
-## 🏛️ Deployment
+## 🗄️ Database Design
 
-The project supports **IIS deployment** via `server/web.config` using `serverless-http`. The client build (`dist/`) can be served as static files via IIS or any static host.
+### 📊 ER Diagram
 
----
-
-## 👨‍💻 Developer Information
-
-| Field             | Details                                |
-| ----------------- | -------------------------------------- |
-| **Name**          | Rajkumar Anbazhagan                    |
-| **Role**          | Full Stack Developer                   |
-| **Project Type**  | Institutional / College Project        |
-| **Developed For** | Nandha Engineering College             |
-| **Year**          | 2026                                   |
+```mermaid
+erDiagram
+    USERS ||--o{ COUNTER_SALES : records
+    LOCATION_MASTER ||--o{ DISTRIBUTED_ITEMS : receives
+    VENDORS ||--o{ PURCHASE_MASTER : provides
+    GROCERY_AVAILABLE_STOCK ||--o{ PURCHASE_MASTER : updated_by
+    COUNTER_STOCK ||--o{ COUNTER_SALES : deducted_from
+```
 
 ---
 
-## 📜 License
+## 🚀 DevOps & Deployment
 
-This project is developed for institutional use within the college environment. All rights reserved.
+### 🐳 Scaling Strategy
+
+- **Containerization**: Easily packageable into Docker containers for consistent deployment.
+- **IIS Integration**: Includes `web.config` for seamless deployment on Windows/IIS servers using `iisnode`.
+- **CI/CD**: Ready for integration with GitHub Actions for automated testing and deployment.
+
+### ⚙️ Deployment Diagram
+
+```mermaid
+graph TD
+    Dev[Developer] --> Git[GitHub Repo]
+    Git --> Actions[GitHub Actions]
+    Actions --> Build[Vite Build & Lint]
+    Build --> Deploy[Production Server]
+    Deploy --> IIS[IIS / Nginx]
+    IIS --> Node[Node.js Runtime]
+```
 
 ---
 
-<p align="center">
-  © 2026 Canteen Management System – Developed by Rajkumar Anbazhagan
-</p>
+## 🧹 Project Optimization सुझाव (Improvements)
+
+During the architectural review, the following optimizations were identified to enhance maintainability and security:
+
+### 1. 🛡️ Security Enhancements (CRITICAL)
+
+- **Middleware Enforcement**: Currently, routes in `server.js` are mounted without global authentication.
+  - **Action**: Implement an `authMiddleware.js` in the `middlewares` folder and apply it to all `/api` routes except `/login`.
+- **Auto-Password Migration**: The system currently supports a mix of plain-text and hashed passwords for legacy reasons.
+  - **Action**: Run a one-time migration script to hash all existing user passwords and enforce hashing on the `createUser` endpoint.
+
+### 2. 🏗️ Structural Improvements
+
+- **Service Layer Pattern**: The controllers currently contain direct SQL logic.
+  - **Action**: Move SQL queries into a `services/` directory to separate data access from request handling.
+- **Consolidated API Routing**: All routers are currently mounted on `/api` separately.
+  - **Action**: Create a central `index.js` in `routes/` that combines all routers, then mount that single router in `server.js`.
+
+### 3. 🧹 Cleanup & Pruning
+
+- **Redundant Files**:
+  - `server/routes/demo.js`: Contains placeholder code. **Remove.**
+  - `server/web.config`: Only necessary if using IIS. If deploying to Linux, move to a `deployment/` folder.
+- **Environment Management**:
+  - Provide `.env.example` files to prevent accidental leakage of secrets.
+
+---
+
+## 🔮 Future Enhancements
+
+- **AI Demand Prediction**: Analyze historical sales to predict stock requirements for the next week.
+- **Automated Reordering**: Integration with vendor APIs for automatic restocking.
+- **Mobile App**: A specialized Flutter/React Native app for counter staff.
+
+---
+
+_Created with ❤️ by Rajkumar Anbazhagan._
